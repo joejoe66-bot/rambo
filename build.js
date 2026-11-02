@@ -244,21 +244,67 @@ var homeScript = "  <script>(function(){var m=" + JSON.stringify(redirectMap) + 
 
 write("index.html", page({
   file: "index.html",
-  title: "RAMBO — A Dog With Cancer · 一隻患了末期血癌的狗",
-  ogTitle: "RAMBO",
-  description: "RAMBO — A DOG WITH CANCER. How he was revived from a terminal cancer through a MIRACLE. 一隻患了末期血癌的狗 – 死後復生、及顯現了奇蹟",
+  title: "RAMBO — A Rottweiler With Terminal Cancer (Lymphoma) Revived by a Miracle · 一隻患了末期血癌的狗",
+  ogTitle: "RAMBO — A Dog With Cancer · 一隻患了末期血癌的狗",
+  description: "RAMBO — A DOG WITH CANCER. The true story of a Rottweiler with terminal lymphoma (dog blood cancer), and how he was revived through a MIRACLE. 一隻患了末期血癌（淋巴癌）的洛威拿狗 – 死後復生、及顯現了奇蹟",
   image: firstImage(CHAPTERS[1]),
   body: homeBody(),
   extraScript: homeScript
 }));
 
+/*
+ * 搜尋用的標題和簡介（只出現在 Google 搜尋結果及分享預覽，文章內容不變）
+ * [標題, 簡介開頭]
+ */
+var SEO = [
+  ["A Rottweiler With Terminal Cancer Revived by a Miracle | 末期血癌狗死後復生",
+   "The true story of Rambo, a Rottweiler diagnosed with terminal lymphoma (dog blood cancer) in 2007. 洛威拿狗 Rambo 患上末期淋巴癌（血癌）的真實故事。"],
+  ["Rambo & Rocky, Two Rottweiler Brothers | 洛威拿狗兄弟",
+   "Meet Rambo and Rocky, two Rottweiler brothers. 洛威拿狗兄弟 Rambo 和 Rocky。"],
+  ["Rottweiler Diagnosed With Lymphoma, One Month to Live | 洛威拿狗患淋巴癌",
+   "Dog lymphoma diagnosis: one month to live. 狗狗淋巴癌診斷。"],
+  ["Dog Lymphoma Symptoms: Bleeding From Nose and Mouth | 狗狗淋巴癌病徵",
+   "Symptoms of lymphoma in dogs. 狗狗癌症病徵：口鼻流血。"],
+  ["Internal Bleeding in a Dog With Cancer | 癌症狗內出血",
+   "Internal bleeding from dog cancer. 狗狗癌症內出血。"],
+  ["Critical Symptoms of Lymphoma in Dogs | 狗狗末期癌症病徵",
+   "End-stage lymphoma symptoms in a dog. 狗狗末期淋巴癌病徵。"],
+  ["Euthanizing a Dog With Terminal Cancer | 替末期癌症狗安樂死",
+   "The decision to euthanize a dog with terminal cancer. 替末期癌症狗安樂死的決定。"],
+  ["Sifu Transferred Energy to a Dying Dog | 師父傳送能量給垂死的狗",
+   "Energy healing for a dying dog with cancer. 師父為垂死的癌症狗傳送能量。"],
+  ["The Gods Suspended Rambo's Cancer | 神壓抑了狗狗的癌症",
+   "A dog with cancer that no longer suffered. 癌症狗不再受苦。"],
+  ["Dog Lymphoma Symptoms Disappeared, Vet Testimonies | 淋巴癌病徵消失 獸醫見証",
+   "Lymphoma tumours shrank and bleeding stopped, confirmed by two English vets. 淋巴腫瘤縮小，兩位英國獸醫見証。"],
+  ["A Dog With Terminal Cancer Miraculously Revived | 癌症狗神奇地起死回生",
+   "A Rottweiler with terminal lymphoma lived another 6 weeks. 末期淋巴癌洛威拿狗多活了6星期。"],
+  ["Video: A Rottweiler With Cancer Playing Like a Healthy Dog | 影片：癌症狗像健康狗一樣",
+   "Video of a dog with terminal cancer running and playing. 影片：末期癌症狗跑跳玩耍。"],
+  ["Video: How Rambo Could Run | 影片：癌症狗神速奔跑",
+   "Video of Rambo, a Rottweiler with lymphoma, running. 影片：患淋巴癌的洛威拿狗奔跑。"],
+  ["Transfer of Energy and Life Force | 師父與狗狗交換能量及生命力",
+   "Energy and life force exchanged with a dying dog. 師父與垂死的狗交換能量。"],
+  ["A Dog With Cancer Who Died Peacefully at Home | 癌症狗在家安詳離世",
+   "How Rambo, a Rottweiler with lymphoma, passed away at home. 患淋巴癌的洛威拿狗在家離世。"],
+  ["Rambo's Revival, a Miracle | 狗狗起死回生的奇蹟",
+   "A miracle: a Rottweiler with terminal cancer revived. 末期癌症洛威拿狗起死回生的奇蹟。"]
+];
+
+function seoDescription(n, ch) {
+  var lead = SEO[n - 1] ? SEO[n - 1][1] : "";
+  var d = (lead + " " + description(ch)).trim();
+  return d.length > 230 ? d.slice(0, 228) + "…" : d;
+}
+
 CHAPTERS.forEach(function (ch, i) {
   var n = i + 1;
+  var seoTitle = SEO[i] ? SEO[i][0] : ch.title;
   write(chapterFile(n), page({
     file: chapterFile(n),
-    title: ch.title + " · RAMBO — A Dog With Cancer 一隻患了末期血癌的狗",
-    ogTitle: ch.title + " · RAMBO",
-    description: description(ch),
+    title: seoTitle + " · RAMBO " + n,
+    ogTitle: seoTitle + " · RAMBO",
+    description: seoDescription(n, ch),
     image: firstImage(ch) || firstImage(CHAPTERS[1]),
     prev: n > 1 ? chapterFile(n - 1) : null,
     next: n < CHAPTERS.length ? chapterFile(n + 1) : null,
