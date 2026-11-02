@@ -14,6 +14,29 @@
 const IMG_BASE = "https://blogger.googleusercontent.com/img/b/R29vZ2xl/";
 const MEDIA_BASE = "https://www.blogger.com/video.g?token=";
 
+/*
+ * 已下載到 assets/media/ 的影音（檔名 = 章數-種類）
+ *   chNN-english.m4a / chNN-cantonese.m4a  旁述錄音
+ *   chNN-video.mp4 (+ chNN-video.jpg 封面)  影片
+ * 列在這裏的會用網站自己的播放器；未列出的仍然用 Blogger。
+ */
+const LOCAL_MEDIA = [
+  "ch03-english", "ch03-cantonese",
+  "ch04-english", "ch04-cantonese",
+  "ch05-english", "ch05-cantonese",
+  "ch06-english", "ch06-cantonese",
+  "ch07-english", "ch07-cantonese",
+  "ch08-english", "ch08-cantonese",
+  "ch09-english", "ch09-cantonese",
+  "ch10-english", "ch10-cantonese",
+  "ch11-english", "ch11-cantonese",
+  "ch12-english", "ch12-cantonese", "ch12-video",
+  "ch13-video",
+  "ch14-english", "ch14-cantonese",
+  "ch15-english", "ch15-cantonese",
+  "ch16-english", "ch16-cantonese",
+];
+
 const CHAPTERS = [
   {
     title: "RAMBO (chapter 1)",

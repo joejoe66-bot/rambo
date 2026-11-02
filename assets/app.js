@@ -50,14 +50,36 @@
       ' onerror="this.onerror=null;this.src=\'' + esc(imgUrl(b[1], b[2], "s400")) + '\'">' +
       "</button></figure>";
   }
+  // 本地影音檔名：ch03-english / ch03-cantonese / ch12-video
+  var curCh = 0;
+  function localName(b) {
+    var kind = b[0] === "video" ? "video" : (b[2] === "旁述" ? "cantonese" : "english");
+    var name = "ch" + (curCh < 10 ? "0" : "") + curCh + "-" + kind;
+    return (typeof LOCAL_MEDIA !== "undefined" && LOCAL_MEDIA.indexOf(name) !== -1) ? name : null;
+  }
   function renderAudio(b) {
+    var name = localName(b);
+    if (name) {
+      return '<div class="audio local">' +
+        '<div class="label">🎧 ' + esc(b[2]) + "</div>" +
+        '<audio controls preload="none" src="assets/media/' + name + '.m4a"></audio></div>';
+    }
     return '<div class="audio">' +
       '<iframe loading="lazy" allowfullscreen title="' + esc(b[2]) + '" src="' + esc(mediaUrl(b[1])) + '"></iframe>' +
       '<div class="label">' + esc(b[2]) + "</div></div>";
   }
   function renderVideo(b) {
+    var name = localName(b);
+    if (name) {
+      return '<div class="video local"><video controls playsinline preload="metadata" poster="assets/media/' + name +
+        '.jpg" src="assets/media/' + name + '.mp4"></video></div>';
+    }
     return '<div class="video"><iframe loading="lazy" allowfullscreen title="Rambo video" src="' + esc(mediaUrl(b[1])) + '"></iframe></div>';
   }
+  // 同一時間只播一段
+  document.addEventListener("play", function (e) {
+    document.querySelectorAll("audio, video").forEach(function (m) { if (m !== e.target) m.pause(); });
+  }, true);
 
   function renderBlocks(blocks) {
     var html = "";
@@ -137,6 +159,7 @@
     var ch = CHAPTERS[n - 1];
     var prev = CHAPTERS[n - 2], next = CHAPTERS[n];
     var body;
+    curCh = n;
     if (n === 1) {
       body = '<div class="cover-inline">' + renderBlocks(ch.blocks) + "</div>";
     } else {

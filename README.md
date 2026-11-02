@@ -29,9 +29,8 @@ assets/style.css    設計
 
 ## 注意
 
-- 圖片、錄音和影片目前仍然存放在 Google Blogger 的伺服器上（新網站直接播放它們）。
-  **請不要刪除原本的 Blogger 網誌**，否則圖片和影音會消失。
-- 如想完全獨立，可以把原檔下載後放入 `assets/media/`，再修改 `content.js` 的網址。
+- 旁述錄音（26 段，`.m4a`）和影片（2 段，`.mp4`）已經下載到 `assets/media/`，由網站自己播放，不再依賴 Blogger。
+- 相片目前仍然存放在 Google Blogger 的伺服器上，**請不要刪除原本的 Blogger 網誌**，否則相片會消失。
 
 ## 以後要改文字
 
