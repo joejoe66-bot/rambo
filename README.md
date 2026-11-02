@@ -5,9 +5,13 @@
 ## 檔案
 
 ```
-index.html          網站主頁
+index.html          首頁 + 目錄（由 build.js 產生）
+chapter-1~16.html   每章一頁（由 build.js 產生）
+sitemap.xml         網站地圖（由 build.js 產生）
+build.js            產生網頁的程式
 assets/content.js   全部 16 章內容（文字、圖片、錄音、影片）
-assets/app.js       頁面程式（目錄、翻頁、放大相片）
+assets/media/       旁述錄音和影片
+assets/app.js       頁面程式（翻頁、放大相片）
 assets/style.css    設計
 .nojekyll           讓 GitHub Pages 直接發佈檔案
 ```
@@ -34,4 +38,16 @@ assets/style.css    設計
 
 ## 以後要改文字
 
-全部內容都在 `assets/content.js`，用任何文字編輯器打開，直接修改引號內的文字即可。
+全部內容都在 `assets/content.js`。改完之後要重新產生網頁：
+
+```
+node build.js
+```
+
+它會更新 `index.html`、`chapter-1.html` 至 `chapter-16.html` 和 `sitemap.xml`，再把全部檔案上傳即可（也可以叫 Claude 代你做）。
+
+## Google 搜尋
+
+- 每章都是獨立網頁（`chapter-N.html`），有標題和簡介，方便 Google 收錄。
+- 網站地圖：https://joejoe66-bot.github.io/rambo/sitemap.xml ，在 Google Search Console 提交。
+- Search Console 的驗證碼放在 `google-verification.txt`（只寫 content="…" 裏面那串字），然後執行 `node build.js`。

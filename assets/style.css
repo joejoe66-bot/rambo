@@ -147,7 +147,7 @@ main { outline: none; min-height: 70vh; }
 .ch-kicker {
   display: flex; align-items: center; gap: 12px;
   font-family: var(--serif-en); letter-spacing: .18em; font-size: .82rem; color: var(--accent-ink);
-  margin: 0 0 28px;
+  margin: 0 0 28px; font-weight: 400; line-height: 1.6;
 }
 .ch-kicker::after { content: ""; flex: 1; height: 1px; background: var(--line); }
 
