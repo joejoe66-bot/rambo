@@ -9,8 +9,8 @@
   --accent: #d9772b;      /* Rambo 的橙色頸圈 */
   --accent-ink: #a9520f;
   --shadow: 0 1px 2px rgba(60, 40, 20, .06), 0 8px 24px rgba(60, 40, 20, .08);
-  --serif-en: "EB Garamond", Georgia, "Times New Roman", serif;
-  --serif-zh: "Noto Serif TC", "Songti TC", "PMingLiU", serif;
+  --serif-en: "EB Garamond", Garamond, "Iowan Old Style", Georgia, "Times New Roman", serif;
+  --serif-zh: "Noto Serif TC", "Songti TC", "Songti SC", "STSong", "Source Han Serif TC", "PMingLiU", "SimSun", serif;
   --measure: 40rem;
   color-scheme: light;
 }

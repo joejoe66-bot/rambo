@@ -11,6 +11,7 @@ sitemap.xml         網站地圖（由 build.js 產生）
 build.js            產生網頁的程式
 assets/content.js   全部 16 章內容（文字、圖片、錄音、影片）
 assets/media/       旁述錄音和影片
+assets/photos/      相片
 assets/app.js       頁面程式（翻頁、放大相片）
 assets/style.css    設計
 .nojekyll           讓 GitHub Pages 直接發佈檔案
@@ -34,7 +35,8 @@ assets/style.css    設計
 ## 注意
 
 - 旁述錄音（26 段，`.m4a`）和影片（2 段，`.mp4`）已經下載到 `assets/media/`，由網站自己播放，不再依賴 Blogger。
-- 相片目前仍然存放在 Google Blogger 的伺服器上，**請不要刪除原本的 Blogger 網誌**，否則相片會消失。
+- 15 張相片已下載到 `assets/photos/`（對照表 `map.tsv`），網站不再依賴 Google / Blogger，中國大陸也看得到。
+- 網站不使用 Google 字型，改用電腦和手機本身的字型，大陸打開不會卡住。
 
 ## 以後要改文字
 

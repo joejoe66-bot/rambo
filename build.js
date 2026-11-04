@@ -12,7 +12,7 @@ var path = require("path");
 var vm = require("vm");
 
 var SITE = "https://joejoe66-bot.github.io/rambo/";
-var VERSION = "3"; // 改動 css/js 時加一，避免瀏覽器用舊檔
+var VERSION = "4"; // 改動 css/js 時加一，避免瀏覽器用舊檔
 var ROOT = __dirname;
 
 // ---------- load content ----------
@@ -39,6 +39,18 @@ function isZh(s) {
   return !!m && m.length / s.replace(/\s/g, "").length > 0.3;
 }
 function imgUrl(id, name, size) { return IMG_BASE + id + "/" + size + "/" + name; }
+
+// 相片已下載到 assets/photos/（對照表 assets/photos/map.tsv：Blogger 圖片ID → 檔案）
+var PHOTOS = {};
+try {
+  fs.readFileSync(path.join(ROOT, "assets/photos/map.tsv"), "utf8").split("\n").forEach(function (line) {
+    var p = line.split("\t");
+    if (p[0] && p[1]) PHOTOS[p[0]] = p[1].trim();
+  });
+} catch (e) {}
+// 網站內使用的相片位置（有本地檔就用本地檔）
+function photoSrc(b) { return PHOTOS[b[1]] || imgUrl(b[1], b[2], "s1600"); }
+function photoAbs(b) { return PHOTOS[b[1]] ? SITE + PHOTOS[b[1]] : imgUrl(b[1], b[2], "s1600"); }
 function chapterFile(n) { return "chapter-" + n + ".html"; }
 function oneLine(s) { return s.replace(/\s*\n\s*/g, " ").trim(); }
 
@@ -75,16 +87,15 @@ function mediaSummary(ch) {
 }
 function firstImage(ch) {
   var b = ch.blocks.filter(function (x) { return x[0] === "img"; })[0];
-  return b ? imgUrl(b[1], b[2], "s1600") : null;
+  return b ? photoAbs(b) : null;
 }
 
 // ---------- block rendering ----------
 function renderPhoto(b) {
-  var full = imgUrl(b[1], b[2], "s1600");
+  var full = photoSrc(b);
   var alt = b[2].replace(/\.[a-z]+$/i, "").replace(/[+=_-]+/g, " ");
   return '<figure class="photo"><button type="button" data-full="' + esc(full) + '" aria-label="放大 ' + esc(alt) + '">' +
-    '<img loading="lazy" decoding="async" src="' + esc(full) + '" alt="' + esc(alt) + '"' +
-    ' onerror="this.onerror=null;this.src=\'' + esc(imgUrl(b[1], b[2], "s400")) + '\'">' +
+    '<img loading="lazy" decoding="async" src="' + esc(full) + '" alt="' + esc(alt) + '">' +
     "</button></figure>";
 }
 function localName(n, b) {
@@ -161,9 +172,6 @@ function page(opts) {
     (opts.prev ? '  <link rel="prev" href="' + opts.prev + '">\n' : "") +
     (opts.next ? '  <link rel="next" href="' + opts.next + '">\n' : "") +
     "  <link rel=\"icon\" href=\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23d9772b'/%3E%3Ctext x='32' y='43' font-family='Georgia,serif' font-size='32' font-weight='700' text-anchor='middle' fill='%23fff'%3ER%3C/text%3E%3C/svg%3E\">\n" +
-    '  <link rel="preconnect" href="https://fonts.googleapis.com">\n' +
-    '  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n' +
-    '  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Noto+Serif+TC:wght@400;600;700&display=swap" rel="stylesheet">\n' +
     '  <link rel="stylesheet" href="assets/style.css?v=' + VERSION + '">\n' +
     "</head>\n<body>\n" +
     '  <a class="skip" href="#main">Skip to content</a>\n\n' +
@@ -212,7 +220,7 @@ function homeBody() {
     '<a class="btn btn-ghost" href="#contents">目錄 Contents</a>' +
     "</div></div>" +
     '<figure class="cover-photo">' +
-    '<img src="' + esc(imgUrl(photo[1], photo[2], "s1600")) + '" alt="Rambo &amp; Rocky">' +
+    '<img src="' + esc(photoSrc(photo)) + '" alt="Rambo &amp; Rocky">' +
     "<figcaption>" + esc(photoCap[1] ? photoCap[1][1] : "") + "</figcaption>" +
     "</figure></section>" + tocHtml();
 }
