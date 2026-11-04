@@ -1,0 +1,35 @@
+name: fetch-photos
+on:
+  push:
+    paths: [".github/workflows/fetch-photos.yml"]
+permissions:
+  contents: write
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download Blogger photos into assets/photos
+        run: |
+          node -e '
+          const fs=require("fs"),vm=require("vm");const c={};vm.createContext(c);
+          vm.runInContext(fs.readFileSync("assets/content.js","utf8")+";this.C=CHAPTERS;this.B=IMG_BASE",c);
+          const L=[];c.C.forEach((ch,i)=>ch.blocks.forEach(b=>{if(b[0]==="img")L.push([i+1,b[1],b[2]])}));
+          fs.writeFileSync("/tmp/list.tsv",L.map(x=>x.join("\t")).join("\n")+"\n");
+          console.log(L.length+" photos");
+          fs.writeFileSync("/tmp/base",c.B);'
+          mkdir -p assets/photos
+          BASE=$(cat /tmp/base); i=0
+          while IFS=$'\t' read -r ch id name; do
+            i=$((i+1)); ext="${name##*.}"; ext=$(echo "$ext" | tr 'A-Z' 'a-z')
+            out=$(printf "assets/photos/ch%02d-%02d.%s" "$ch" "$i" "$ext")
+            curl -fsSL --retry 3 -o "$out" "${BASE}${id}/s1600/${name}" && echo "ok $out $(stat -c%s "$out")" || echo "FAIL $name"
+            printf "%s\t%s\n" "$id" "$out" >> assets/photos/map.tsv
+          done < /tmp/list.tsv
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898333+github-actions[bot]@users.noreply.github.com"
+          git add assets/photos
+          git commit -m "Download Blogger photos into assets/photos" || echo nothing
+          git push
